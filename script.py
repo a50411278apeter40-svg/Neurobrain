@@ -842,7 +842,7 @@ except Exception as e:
     print(f"최종 에러 내용: {exc_value}")
     print("=====================================================")
     traceback.print_exc()
-
+"""
 # 에러가 터지는 정확한 흐름을 잡아내기 위해 huggingface_hub의 유효성 검사 부분을 모니터링하며 토크나이저 호출을 테스트합니다.
 import traceback
 try:
@@ -856,15 +856,6 @@ except Exception as e:
     print(f"에러 메시지: {e}")
     print("\n[상세 에러 발생 추적 경로]")
     traceback.print_exc()
-
-"""## 6) 사람 피드백 강화학습 (TRL RLOO)
-실행하면 모델의 답이 나오고 **점수 입력창**이 뜹니다.
-- `1`~`5` 입력 (5=아주 좋음) / `s` = 건너뛰기 / `q` = 학습 중단하고 저장
-- 3점은 보상 0(중립), 5점은 +1, 1점은 -1
-- 모든 평가는 `human_scores.jsonl`에 기록됩니다
-
-`SOURCE`: `'chat'` = 한국어 짧은 질문, `'fable'` = MoreThought Fable 데이터의 첫 지시문(영어, 긴 코딩 명세 앞부분)
-"""
 
 import sys
 from datasets import Dataset
@@ -891,15 +882,12 @@ try: trainer.train()
 except KeyboardInterrupt: print("학습을 중단하고 저장합니다.")
 trainer.save_model("neurobrain_rlhf"); tok_rl.save_pretrained("neurobrain_rlhf"); print("저장 완료: neurobrain_rlhf")
 
-"""## 7) 학습 전후 비교 / 채팅
-SFT 모델과 RLHF 모델에게 같은 질문을 해서 비교합니다. 그다음 직접 채팅할 수 있습니다.
 """
-
 sft = NeuroBrainForCausalLM.from_pretrained("neurobrain_sft")
 sft.push_to_hub("peterpeter8585/nuerobrain",token="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")
 
 tok.push_to_hub("peterpeter8585/nuerobrain",token="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")
-
+"""
 from chat_cli import reply
 sft = NeuroBrainForCausalLM.from_pretrained("neurobrain_sft").eval(); rl = NeuroBrainForCausalLM.from_pretrained("neurobrain_rlhf").eval()
 for q in ["안녕하세요", "대한민국의 수도는 어디인가요?", "건강하게 사는 방법을 알려줘"]:
@@ -913,9 +901,4 @@ while True:
     a = reply(rl, tok_rl, history, q, max_new_tokens=120); print("뉴로브레인:", a or "(답변 없음)")
     history += [{"role": "user", "content": q}, {"role": "assistant", "content": a}]
 
-"""## 8) 모은 점수 확인
-```python
-import pandas as pd; pd.read_json("human_scores.jsonl", lines=True)
-```
-점수를 계속 쌓아 두면 나중에 보상 모델(`RewardTrainer`)을 학습해 사람 없이 자동 평가하는 단계로 넘어갈 수 있습니다(진짜 GPT-3.5/InstructGPT 방식).
 """
