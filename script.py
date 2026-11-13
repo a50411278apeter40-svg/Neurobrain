@@ -746,7 +746,7 @@ try:
 
     print("--- 3단계: Model 인스턴스 생성 및 CPU 이동 중 ---")
     model = NeuroBrainForCausalLM(cfg).to(DEVICE)
-    model = model.to("cuda")
+    model = model.to("cpu")
 
     print(SIZE, f"{sum(p.numel() for p in model.parameters())/1e6:.1f}M")
 
@@ -808,7 +808,7 @@ try:
         greater_is_better=False,
         fp16=False,
         bf16=False,
-        use_cpu=False,
+        use_cpu=True,
         report_to="none",
         gradient_checkpointing=False
     )
