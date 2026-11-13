@@ -725,10 +725,10 @@ try:
     S = SIZES[SIZE]
 
     # 일관된 재현성을 위한 시드 고정
-    SEED = 677
+    SEED = 7777
     def corpus():
           # 토크나이저 빌드 데이터를 2000건으로 축소하여 램 보존
-          for s, u, a in data[:2000]:
+          for s, u, a in data[:4000]:
                   yield u[:100]; yield a[:250]
     random.seed(SEED)
     np.random.seed(SEED)
@@ -754,7 +754,7 @@ try:
     # 손실률 완화를 위해 학습 데이터 크기를 500에서 800으로 소폭 확대하여 질적 균형 확보
     rows_ = [(u, a) for s, u, a in data if 20 < len(a) < 180 and 15 < len(u) < 80][:800]
 
-    max_seq_length = 96
+    max_seq_length = 9600
     input_ids_list = []
     attention_mask_list = []
     labels_list = []
